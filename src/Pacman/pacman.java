@@ -1,5 +1,6 @@
 package Pacman;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -15,6 +16,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -23,6 +27,9 @@ public class pacman extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private DrawingPanel drawingPanel;
+	private player pacman;
+	private List<player> paredes = new ArrayList<>();
+
 
 	// Variables de los ejes "x" y "y" del pacman
 	private int ejeX = 255;
@@ -88,6 +95,9 @@ public class pacman extends JFrame implements KeyListener {
 			}
 		});
 		panel_2.add(btnNewButton);
+		
+		paredes.add(new player(30, 30, 300, 70, Color.pink));
+		paredes.add(new player(450, 30, 300, 70, Color.pink));
 
 	}
 
@@ -104,6 +114,11 @@ public class pacman extends JFrame implements KeyListener {
 			// Dibujo de pacman
 			g2d.setColor(Color.YELLOW);
 			g2d.fillOval(ejeX, ejeY, 50, 50);
+			
+			for (player player : paredes) {
+				g2d.setColor(player.c);
+				g2d.fillRect(player.x, player.y, player.h, player.w);
+			}
 
 		}
 	}
@@ -114,11 +129,14 @@ public class pacman extends JFrame implements KeyListener {
 
 	}
 
+	Boolean Player = false;
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 //		System.out.println("numero: " + e.getKeyCode());
 
+	
+		
 		if (e.getKeyCode() == 37 || e.getKeyCode() == 65) {
 			// Izquierda
 			ejeX -= 5;
@@ -146,6 +164,36 @@ public class pacman extends JFrame implements KeyListener {
 		}
 
 		drawingPanel.repaint();
+
+	}
+
+	class player {
+
+		private int x, y, w, h;
+		private Color c;
+
+		public player(int x, int y, int w, int h, Color c) {
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.c = c;
+		}
+
+		public Boolean colision(player target) {
+			if (this.x < target.x + target.w &&
+
+					this.x + this.w > target.x &&
+
+					this.y < target.y + target.h &&
+
+					this.y + this.h > target.y){
+
+				return true;
+			}
+			
+			return false;
+		}
 
 	}
 
